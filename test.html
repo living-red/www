@@ -8,21 +8,13 @@
   src="https://cdn.jsdelivr.net/npm/@nimiq/hub-api@v1.0/dist/standalone/HubApi.standalone.umd.js"
   integrity="sha256-HZuohwzM5nRdRQh3HLpAcYGbpNe6PtqZRyK+VvUI+nU=" crossorigin="anonymous"></script>
 
-  <script src="https://cdn.nimiq.com/latest/nimiq.js"></script>
-<script>
-    Nimiq.load().then(async function() {
-
-        // Configure for Testnet. For Mainnet, use main().
-        Nimiq.GenesisConfig.test();
-
-        // Instantiate a config builder.
-        const configBuilder = Nimiq.Client.Configuration.builder();
-
-        // Create a client based on your configuration,
-        // it will automatically connect to the network.
-        const client = configBuilder.instantiateClient();
-    });
+    <script>
+const nimAddress = 'NQ139Y89U6RRYRA48SRYDUD95T66T87LSTP1';
+const nimAddressLabel = 'Living Red';
 </script>
+
+<script src="https://nimipay.com/np.0.1.min.js"></script>
+<link href="https://nimipay.com/np.0.1.min.css" rel="stylesheet">
     
     <style>
         .nomics-ticker-widget-embedded.nomics-ticker-widget-bg-light {
@@ -45,13 +37,13 @@
     </style>
 </head>
     <body>
-    <h1>We are build something great!</h1>
+    <header>
+        <div id="header"><h6>LIVING <b><font color="#ff0000">RED</font></b></h6><div id="np-wallet" class="np-btn"></div>
+    </header>
     <center>
-        <div class="nomics-ticker-widget" data-name="Nimiq" data-base="NIM" data-quote="USD"></div><script src="https://widget.nomics.com/embed.js"></script>
         <br>
         <br>
-        <div><a href="https://wallet.nimiq.com/nimiq:NQ139Y89U6RRYRA48SRYDUD95T66T87LSTP1" target="_blank"><img src="https://www.nimiq.com/accept-donations/img/donationBtnImg/red-big.svg"/></a></div>
-        <br>
+        
     </center>
 </body>
 </html>

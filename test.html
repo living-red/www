@@ -1,31 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="description" content="NIM TEST APP">
     <meta charset=utf-8 />
     <title>Nimiq Demo App</title>
+        <script
+  src="https://cdn.jsdelivr.net/npm/@nimiq/hub-api@v1.0/dist/standalone/HubApi.standalone.umd.js"
+  integrity="sha256-HZuohwzM5nRdRQh3HLpAcYGbpNe6PtqZRyK+VvUI+nU=" crossorigin="anonymous"></script>
 
-    <!-- Load the Nimiq library -->
-    <script type="text/javascript" src="https://cdn.nimiq.com/v1.5.8/nimiq.js"></script>
+    <script type="text/javascript" src="https://cdn.nimiq.com/v1.5/nimiq.js"></script>
     <script>
-async function start() {
-    status('Nimiq loaded. Establishing consensus...');           // <= Here,
+        function status(text) {
+            document.getElementById('message').textContent = text;
+            console.log(`Status: ${text}`);
+        }
 
-    // Code from 'Getting started'
-    Nimiq.GenesisConfig.test();
-    const configBuilder = Nimiq.Client.Configuration.builder();
-    const client = configBuilder.instantiateClient();
+        async function start() {
+            status('Nimiq loaded. Establishing consensus...');
 
-    status('Syncing and establishing consensus...');             // <= here,
+            // Config to use Nimiq Testnet - change to 'main()' for Mainnet.
+            Nimiq.GenesisConfig.test();
 
-    // Can be 'syncing', 'established', and 'lost'
-    client.addConsensusChangedListener((consensus) =>
-        status(`Consensus: ${ consensus }`)                      // <= and here.
-    );
-};
+            // the config builder will create the minimal necessary client for you.
+            const configBuilder = Nimiq.Client.Configuration.builder();
+
+            // By not requesting any addition features, a Nimiq Pico Client instance will be created
+            // E.g. to be able to mine, we can add a Mempool here: 'configBuilder.feature(Nimiq.Client.Feature.MEMPOOL);'
+
+            // Create a client based on your configuration;
+            // It will automatically connect to the network.
+            const client = configBuilder.instantiateClient();
+
+            // Waiting for consensus to be establish
+            client.addConsensusChangedListener((consensus) => {
+                const message = consensus === Nimiq.Client.ConsensusState.ESTABLISHED
+                    ? 'Consensus established.'
+                    : 'Establishing consensus...'
+
+                // Update displayed status
+                status(message);
+            });
+        };
+
+        // Start loading the Nimiq client library
+        Nimiq.init(start);
     </script>
-
 </head>
 <body>
     <h1>Nimiq Demo App</h1>
-    <div id="message"></div> <!-- this one -->
+    <div id="message">loading...</div>
+    <p><small>Press F12 to open console and see full log.</small><p>
 </body>
+</html>

@@ -1,86 +1,32 @@
-<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Demo</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<style>
-  body {
-    margin: 8px;
-  }
-</style>
-<script src="https://cdn.nimiq.com/nimiq.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+  <title>TEST</title>
     <script>
-      //NQ14T0KEN000000000000000000000000000
-      function parseTxData(str) {
-        //max. 64 bytes
-        var data = str.split(";");
-        var amount = parseInt(data[0], 10);
-        if (isNaN(amount)) throw new Error("invalid tx data");
-        if (amount < 0) throw new Error("sending negative tokens is stealing");
-        if (amount === 0) throw new Error("sending 0 tokens is pointless and impossible"); 
-        return {amount: amount, to: Nimiq.Address.fromUserFriendlyAddress(data[1]), type: "transfer"};
-      }
-      document.addEventListener("DOMContentLoaded", function () {
-        Nimiq.init(async function () {
-          Nimiq.Log.instance.level = 1;
-          Nimiq.GenesisConfig.main();
-          var tokenAddr = Nimiq.Address.fromUserFriendlyAddress(prompt("Token address?", "NQ17 0R3R NEQN NSPM ALAH 2MN1 H6PD H1NE R4YT"));
-          var tokenAddrApi = tokenAddr.toUserFriendlyAddress().replace(/ /g, "+");
-          var history = await ((await fetch("https://nimiq.mopsus.com/api/block/" + tokenAddrApi)).json());
-          history.reverse();
-          var parsedHistory = [];
-          var balances = {};
-          balances[tokenAddr.toUserFriendlyAddress()] = Infinity;
-          history.forEach(item => {
-            if (!item.data) {
-              return parsedHistory.push({"type": "error", "reason": "no transaction data", sender: item.sender});
-            }
-            if (item.data.indexOf(";") === -1) {
-              return parsedHistory.push({"type": "error", "reason": "no semicolon", sender: item.sender});
-            }
-            try {
-              let tx = parseTxData(item.data);
-              tx.sender = item.sender;
-              if (!balances[item.sender] || (balances[item.sender] < tx.amount)) return parsedHistory.push({"type": "error", "reason": "not enough funds", sender: item.sender});
-              balances[item.sender] -= tx.amount;
-              if (!balances[tx.to.toUserFriendlyAddress()]) balances[tx.to.toUserFriendlyAddress()] = 0;
-              balances[tx.to.toUserFriendlyAddress()] += tx.amount;
-              parsedHistory.push(tx);
-            } catch (e) {
-              return parsedHistory.push({"type": "error", "reason": "couldn't parse tx data", sender: item.sender});
-            }
-          });
-          parsedHistory.reverse();
-          var historyHtml = "";
-          parsedHistory.forEach(tx => {
-            if (tx.type === "error") {
-              historyHtml += '<div style="border: 3px solid red;margin-bottom: 1em;">' + tx.sender + ': ERROR: '+ tx.reason + '</div>';
-              return;
-            }
-            historyHtml += '<div style="border: 2px dotted green;margin-bottom: 1em;">' + tx.sender + " sent " + tx.amount + ' tokens to ' + tx.to.toUserFriendlyAddress() + '</div>';
-          });
-          document.getElementById("txs").innerHTML = historyHtml;
-          var balanceHtml = "";
-          for (var addr in balances) {
-            balanceHtml += "<b>" + addr + "</b>: " + balances[addr] + "<br>";
-          }
-          document.getElementById("balances").innerHTML = balanceHtml;
-          console.log("parsed history", parsedHistory);
-        });
-      });
+      const nimAddress = 'NQ13 9Y89 U6RR YRA4 8SRY DUD9 5T66 T87L STP1';
+      const nimAddressLabel = 'LivingRED';
     </script>
   </head>
   <body>
-    <h1>Nimiq Token Demo</h1>
-<br><br>
+    <center>
+      <script>
+ Nimiq.load().then(async function() {
 
-    All balances
-    <div id="balances"></div>
-    All transactions made for this token:
-    <div id="txs"></div>
-  </body>
-</html>
+        // Configure for Testnet. For Mainnet, use main().
+        Nimiq.GenesisConfig.test();
+
+        // Instantiate a config builder.
+        const configBuilder = Nimiq.Client.Configuration.builder();
+
+        // Create a client based on your configuration,
+        // it will automatically connect to the network.
+        const client = configBuilder.instantiateClient();
+    });
+</script>
+      <div id="np-wallet" class="np-btn">Open My NIM Wallet</div></center>
+    <br>
+      </body>
+  <script src="https://nimipay.com/np.0.1.min.js"></script>
+<link href="https://nimipay.com/np.0.1.min.css" rel="stylesheet">
+    <script src="https://cdn.nimiq.com/latest/nimiq.js"></script>
+    </html>
+    
